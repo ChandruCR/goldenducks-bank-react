@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Form, Button } from "semantic-ui-react";
+import { Form, Button, Message } from "semantic-ui-react";
 import InlineError from "../messages/InlineError";
 
 class LoginForm extends Component {
@@ -10,7 +10,7 @@ class LoginForm extends Component {
         },
         loading: false,
         errors: {}
-    }
+    };
 
     // universal onChange handler
     onChange = e =>
@@ -23,17 +23,20 @@ class LoginForm extends Component {
         const errors = this.validate(this.state.data);
         this.setState({ errors });
         if (Object.keys(errors).length === 0) {
-            this.props.submit(this.state.data);
+            this.setState({ loading: true });
+            this.props
+                .submit(this.state.data)
+                .catch(err => this.setState({ errors: err.response.data.errors, loading: true }));
         }
-    }
+    };
 
     // validating login form fields
     validate = (data) => {
         const errors = {};
         if (!this.validateAccountNumber(data.accountNumber)) errors.accountNumber = "Invalid Account Number";
-        if (!data.accountNumber) errors.accountNumber = "Can't be Empty";
+        if (!data.accountNumber) errors.accountNumber = "Account Number can't be empty";
         return errors;
-    }
+    };
 
     // validating account number using Regular Expression
     validateAccountNumber = (accountNumber) => {
@@ -42,9 +45,13 @@ class LoginForm extends Component {
     }
 
     render() {
-        const { data, errors } = this.state;
+        const { data, errors, loading } = this.state;
         return (
-            <Form onSubmit={this.onSubmit}>
+            <Form onSubmit={this.onSubmit} loading ={loading}>
+                {errors.global && <Message negative>
+                    <Message.Header>Something went wrong</Message.Header>
+                    <p>{errors.global}</p>
+                </Message>}
                 <Form.Field>
                     <label htmlFor="accountNumber">Account Number</label>
                     <input
@@ -65,7 +72,7 @@ class LoginForm extends Component {
 }
 
 LoginForm.PropTypes = {
-    submit : PropTypes.func.isRequired
+    submit: PropTypes.func.isRequired
 }
 
 export default LoginForm;
