@@ -10,6 +10,8 @@ class StatementsDetails extends Component {
         data: this.props.statementSummaryDetails,
         direction: null,
     }
+
+    // sorting based on row header click
     handleSort = clickedColumn => () => {
         const { column, data, direction } = this.state
 
@@ -29,11 +31,11 @@ class StatementsDetails extends Component {
         })
     }
 
-
+    // selected statement id returned home page and which will navigate the statement page
     handleSelect = (id, e) =>
         this.props.select(id);
 
-
+    // renders the statement summary table
     render() {
         const { column, data, direction } = this.state;
         return (

@@ -3,23 +3,31 @@ import { Doughnut } from 'react-chartjs-2';
 import { PropTypes } from 'prop-types';
 import { Grid , Table} from 'semantic-ui-react';
 
-
+// Charts for Home page
 const DCTransChart = ({ DCTransChartData }) => {
-	let colToHex = (c) => {
-		let color = (c < 75) ? c + 75 : c
-		let hex = color.toString(16);
-		return hex.length === 1 ? "0" + hex : hex;
-	}
-	let getRandomColor = () => {
-		return rgbToHex(
-			Math.floor(Math.random() * 255),
-			Math.floor(Math.random() * 255),
-			Math.floor(Math.random() * 255));
-	}
 
-	let rgbToHex = (r, g, b) => {
-		return "#" + colToHex(r) + colToHex(g) + colToHex(b) + "";
-	};
+	 // converts hex code
+    let colToHex = (c) => {
+        let color = (c < 75) ? c + 75 : c
+        let hex = color.toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
+    }
+    
+    // gets random rgb value
+    let getRandomColor = () => {
+        return rgbToHex(
+            Math.floor(Math.random() * 255),
+            Math.floor(Math.random() * 255),
+            Math.floor(Math.random() * 255));
+    }
+
+    // rgb to hex codes
+    let rgbToHex = (r, g, b) => {
+        return "#" + colToHex(r) + colToHex(g) + colToHex(b) + "";
+    };
+
+	// data for Doughnut chart used to display total number transactions, total number of debit transactions and 
+	// total number of credit transactions for every statement.
 	let data_chartAll = DCTransChartData && {
 		datasets: [{
 			data: DCTransChartData.transactionData,
@@ -38,6 +46,8 @@ const DCTransChart = ({ DCTransChartData }) => {
 		}],
 		labels: DCTransChartData.statementTSData
 	};
+
+	// data for doughnut chart used to display number of debit transaction and total debit amount for every statement
 	let data_chartDebit = DCTransChartData && {
 		datasets: [{
 			data: DCTransChartData.noOfDebit,
@@ -51,6 +61,8 @@ const DCTransChart = ({ DCTransChartData }) => {
 		}],
 		labels: DCTransChartData.statementTSData
 	};
+
+	// data for doughnut chart used to display number of credit transaction and total credit amount for every statement
 	let data_chartCredit = DCTransChartData && {
 		datasets: [{
 			data: DCTransChartData.noOfCredit,
@@ -64,7 +76,8 @@ const DCTransChart = ({ DCTransChartData }) => {
 		}],
 		labels: DCTransChartData.statementTSData
 	};
-	console.log(data_chartDebit);
+
+	// legend options for doughnut charts
 	const legendOpts = {
 		display: true,
 		position: 'left',
@@ -76,6 +89,8 @@ const DCTransChart = ({ DCTransChartData }) => {
 			boxWidth: 4
 		}
 	};
+
+	// renders three doughnut charts
 	return (
 		<div>
 			{DCTransChartData &&

@@ -7,6 +7,7 @@ import UserRoute from "./components/routes/UserRoute";
 import GuestRoute from "./components/routes/GuestRoute";
 import {Container} from "semantic-ui-react";
 
+// routes are defined here. UserRoute can be accesible after login only.
 const App = ({ location }) => (
     <Container fluid>
         <GuestRoute location={location} path="/" exact component={LoginPage} />

@@ -6,9 +6,14 @@ import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
 import { Segment } from 'semantic-ui-react';
 
+//login page
 class LoginPage extends Component {
+
+    // api call and navigate to home page on successful login
     submit = data =>
         this.props.login(data).then(() => this.props.history.push("/home"));
+
+    // renders below components on login page - Menu, Login Form
     render() {
         return (
             <Segment.Group raised>
@@ -25,4 +30,5 @@ LoginPage.propTypes = {
     }).isRequired,
     login: PropTypes.func.isRequired
 }
+
 export default connect(null, { login })(LoginPage);

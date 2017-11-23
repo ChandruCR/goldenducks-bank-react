@@ -9,6 +9,8 @@ class TransactionDetails extends Component {
         data: this.props.transactions,
         direction: null,
     }
+
+    // sorting based on row header click
     handleSort = clickedColumn => () => {
         const { column, data, direction } = this.state
 
@@ -26,9 +28,16 @@ class TransactionDetails extends Component {
             data: data.reverse(),
             direction: direction === 'ascending' ? 'descending' : 'ascending',
         })
+    };
+
+    // formatting accountnumber
+    formatAccountNumber = (accNo) => {
+        let formattedaccountNumber = accNo.slice(0, 4) + " " + accNo.slice(4, 8) + " " +
+            accNo.slice(8, 12) + " " + accNo.slice(12, 16) + " " + accNo.slice(16, 18)
+        return formattedaccountNumber;
     }
 
-
+    // renders transaction details table
     render() {
         const { column, data, direction } = this.state;
         return (
@@ -42,25 +51,25 @@ class TransactionDetails extends Component {
                         </Table.Row>
                     </Table.Header>
                 </Table>
-                <Table attached fixed singleLine sortable celled inverted selectable>
+                <Table attached fixed singleLine sortable celled inverted>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell sorted={column === 'iban' ? direction : null} onClick={this.handleSort('iban')}>
+                            <Table.HeaderCell sorted={column === 'iban' ? direction : null} onClick={this.handleSort('iban')} width={2}>
                                 IBAN
                             </Table.HeaderCell>
-                            <Table.HeaderCell sorted={column === 'name' ? direction : null} onClick={this.handleSort('name')}>
+                            <Table.HeaderCell sorted={column === 'name' ? direction : null} onClick={this.handleSort('name')} width={3}>
                                 Name
                             </Table.HeaderCell>
-                            <Table.HeaderCell sorted={column === 'amount' ? direction : null} onClick={this.handleSort('amount')}>
+                            <Table.HeaderCell sorted={column === 'amount' ? direction : null} onClick={this.handleSort('amount')} width={1}>
                                 Amount
                             </Table.HeaderCell>
-                            <Table.HeaderCell sorted={column === 'debit_credit' ? direction : null} onClick={this.handleSort('debit_credit')}>
+                            <Table.HeaderCell sorted={column === 'debit_credit' ? direction : null} onClick={this.handleSort('debit_credit')} width={1}>
                                 Type
                             </Table.HeaderCell>
-                            <Table.HeaderCell sorted={column === 'date' ? direction : null} onClick={this.handleSort('date')}>
+                            <Table.HeaderCell sorted={column === 'date' ? direction : null} onClick={this.handleSort('date')} width={2}>
                                 Date
                             </Table.HeaderCell>
-                            <Table.HeaderCell sorted={column === 'description' ? direction : null} onClick={this.handleSort('description')}>
+                            <Table.HeaderCell sorted={column === 'description' ? direction : null} onClick={this.handleSort('description')} width={6}>
                                 Description
                             </Table.HeaderCell>
                         </Table.Row>
@@ -68,7 +77,7 @@ class TransactionDetails extends Component {
                     <Table.Body>
                         {_.map(data, ({ iban, name, amount, debit_credit, date, description }, index) => (
                             <Table.Row key={index} >
-                                <Table.Cell title={[iban]}>{iban}</Table.Cell>
+                                <Table.Cell title={[this.formatAccountNumber(iban)]}>{this.formatAccountNumber(iban)}</Table.Cell>
                                 <Table.Cell title={[name]}>{name}</Table.Cell>
                                 <Table.Cell title={[amount]}>{amount}</Table.Cell>
                                 <Table.Cell title={[debit_credit.split(/\s+/).map(w => w[0].toUpperCase() + w.slice(1)).join(' ')]}>{debit_credit.split(/\s+/).map(w => w[0].toUpperCase() + w.slice(1)).join(' ')}</Table.Cell>

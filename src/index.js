@@ -15,6 +15,8 @@ const store = createStore(
     rootReducer,
     composeWithDevTools(applyMiddleware(thunk))
 );
+
+// loading state from localstorage value. In case user refreshes the page after login
 if (localStorage.accountDetails) {
     const user = { accountDetails: JSON.parse(localStorage.accountDetails) };
     store.dispatch(userLoggedIn(user));

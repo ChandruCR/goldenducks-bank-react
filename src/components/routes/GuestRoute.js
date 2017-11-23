@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 
+// GuestRoute - Pages which are accesible without user login go through this route
 const GuestRoute = ({ isAuthenticated, component: Component, ...rest }) => (
     <Route
         {...rest}

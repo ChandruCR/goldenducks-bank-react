@@ -3,19 +3,23 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { Table, Icon } from "semantic-ui-react";
 
+// user details are displayed using this component
 const UserDetails = ({ accountNumber, firstName, lastName, currentBalance }) => {
 
+    // formatting accountnumber
     let formatAccountNumber = (accNo) => {
         let formattedaccountNumber = accNo.slice(0, 4) + " " + accNo.slice(4, 8) + " " +
             accNo.slice(8, 12) + " " + accNo.slice(12, 16) + " " + accNo.slice(16, 18)
         return formattedaccountNumber;
     }
 
+    // gets day for passed date
     let getDay = (date) => {
         let weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         return weekday[date.getDay()];
     }
 
+    // formats date with / separtor
     let formatDate = (date) => {
         return date.toJSON().slice(0, 10).replace(/-/g, '/');
     }
@@ -25,6 +29,7 @@ const UserDetails = ({ accountNumber, firstName, lastName, currentBalance }) => 
     let currentDay = getDay(new Date());
     let formattedaccountNumber = formatAccountNumber(accountNumber);
 
+    // renders user details on screen
     return (
         <div>
             <Table color='blue' attached='top' inverted>

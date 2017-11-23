@@ -13,11 +13,13 @@ class LoginForm extends Component {
         errors: {}
     };
 
+    //on change of input values state is updated
     onChange = e =>
         this.setState({
             data: { ...this.state.data, [e.target.name]: e.target.value }
         });
 
+    // on submit of login form input is validated and api request is made
     onSubmit = () => {
         const errors = this.validate(this.state.data);
         this.setState({ errors });
@@ -46,6 +48,7 @@ class LoginForm extends Component {
         return accounNumberFormat.test(accountNumber);
     }
 
+    // below components will be rendered in login form
     render() {
         const { data, errors, loading } = this.state;
         return (

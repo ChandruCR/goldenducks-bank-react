@@ -7,11 +7,13 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import DCTransChart from '../sections/DCTransChart';
 
+// home page 
 class HomePage extends Component {
     state = {
         id: null
     }
 
+    // sets statement id to state and navigates to statement page 
     select = data => {
         this.setState({ id : data });
         this.props.history.push(`/statement/${data}`);
@@ -27,12 +29,14 @@ class HomePage extends Component {
             noOfDebit: [],
             noOfCredit: []
         };
+        // iterating through all statements to generate data required to populate statement summary table
+        // also to generate data for charts
         let statementSummaryDetails = statements.map(statement => {
             let statementTimestamp = statement.date.replace('Z', '').replace('T', ' ').replace(/-/g, '/').slice(0, 19);
-            let totalDebitAmount = 0;
-            let totalCreditAmount = 0;
-            let noOfDebit = 0;
-            let noOfCredit = 0;
+            let totalDebitAmount = 0; // total debit amount in every statement
+            let totalCreditAmount = 0; // total credit amount in every statement
+            let noOfDebit = 0; // total number of debit transactions in every statement
+            let noOfCredit = 0; // total number of credit transactions in every statement
             statement.transactions.forEach(element => {
                 if (element.debit_credit === "debit") {
                     totalDebitAmount += element.amount;
@@ -44,12 +48,15 @@ class HomePage extends Component {
                 }
             });
 
+            // data for charts
             DCTransChartData.statementTSData.push(statement.id);
             DCTransChartData.transactionData.push(statement.transactions.length);
             DCTransChartData.debitData.push(totalDebitAmount);
             DCTransChartData.creditData.push(totalCreditAmount);
             DCTransChartData.noOfDebit.push(noOfDebit);
             DCTransChartData.noOfCredit.push(noOfCredit);
+            
+            // data for statement summary table
             return ({
                 id: statement.id,
                 statementdate: statementTimestamp,
@@ -65,10 +72,11 @@ class HomePage extends Component {
             })
 
         })
-
+        
+        // below components are rendered on home page - Menu, Statements table and charts
         return (
             <Segment.Group raised>
-                <TopMenu />
+                <TopMenu /> 
                 <UserDetails />
                 <br/>
                 <StatementsDetails statementSummaryDetails={statementSummaryDetails} select={this.select} />
@@ -78,6 +86,7 @@ class HomePage extends Component {
         );
     }
 }
+
 
 HomePage.PropTypes = {
     statements: PropTypes.arrayOf({
@@ -101,6 +110,7 @@ HomePage.PropTypes = {
     }).isRequired
 }
 
+// getting statements from state to props
 function mapStateToProps(state) {
     return {
         statements: state.user.accountDetails.statements
