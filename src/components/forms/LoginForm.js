@@ -6,19 +6,18 @@ import InlineError from "../messages/InlineError";
 class LoginForm extends Component {
     state = {
         data: {
-            accountNumber: ""
+            accountNumber: "",
+            password: ""
         },
         loading: false,
         errors: {}
     };
 
-    // universal onChange handler
     onChange = e =>
         this.setState({
             data: { ...this.state.data, [e.target.name]: e.target.value }
         });
 
-    // login form submit handler
     onSubmit = () => {
         const errors = this.validate(this.state.data);
         this.setState({ errors });
@@ -26,7 +25,9 @@ class LoginForm extends Component {
             this.setState({ loading: true });
             this.props
                 .submit(this.state.data)
-                .catch(err => this.setState({ errors: err.response.data.errors, loading: false }));
+                .catch(err =>
+                    this.setState({ errors: err.response.data.errors, loading: false })
+                );
         }
     };
 
@@ -35,6 +36,7 @@ class LoginForm extends Component {
         const errors = {};
         if (!this.validateAccountNumber(data.accountNumber)) errors.accountNumber = "Invalid Account Number";
         if (!data.accountNumber) errors.accountNumber = "Account Number can't be empty";
+        if (!data.password) errors.password = "Password can't be empty";
         return errors;
     };
 
@@ -47,11 +49,13 @@ class LoginForm extends Component {
     render() {
         const { data, errors, loading } = this.state;
         return (
-            <Form onSubmit={this.onSubmit} loading ={loading}>
-                {errors.global && <Message negative>
-                    <Message.Header>Something went wrong</Message.Header>
-                    <p>{errors.global}</p>
-                </Message>}
+            <Form onSubmit={this.onSubmit} loading={loading}>
+                {errors.global && (
+                    <Message negative>
+                      <Message.Header>Something went wrong</Message.Header>
+                      <p>{errors.global}</p>
+                    </Message>
+                  )}
                 <Form.Field>
                     <label htmlFor="accountNumber">Account Number</label>
                     <input
@@ -63,6 +67,18 @@ class LoginForm extends Component {
                         onChange={this.onChange}
                     />
                     {errors.accountNumber && <InlineError text={errors.accountNumber} />}
+                </Form.Field>
+                <Form.Field>
+                    <label htmlFor="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="**********"
+                        value={data.password}
+                        onChange={this.onChange}
+                    />
+                    {errors.password && <InlineError text={errors.password} />}
                 </Form.Field>
                 <Button primary>Login</Button>
             </Form>
